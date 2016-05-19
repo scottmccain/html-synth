@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebMoog 0.1a</title>
+	
+	<link rel='stylesheet' href='Content/themes/base/jquery-ui.css' media='all'>
+	<link rel='stylesheet' href='Content/bootstrap.css' media='all'>
+	<link rel='stylesheet' href='Content/toastr.css' media='all'>
+	<link rel='stylesheet' href='Content/font-awesome.css' media='all'>
+	<link rel='stylesheet' href='Content/bootstrap-responsive.css' media='all'>
+	<link rel='stylesheet' href='Content/bootstrap-dialog.css' media='all'>
+	<link rel='stylesheet' href='Content/Tooltipster/tooltipster.css' media='all'>
+	<link rel='stylesheet' href='app/css/app.css' media='all'>
+	<script src="Scripts/modernizr-2.7.2.js"></script>
+	
+	<style>
+    body {
+        color: #282A39;
+    }
+     .container { max-width: 960px; width: 960px;}
+
+    
+    .module-description {
+        margin-top:20px;
+        font-size:.9em;
+        padding-top: 15px;
+    }
+
+    .btn-bar a:nth-child(n+2) {
+        margin-left: 8px;
+    }
+
+    .tab-pane {
+        margin-top: 20px;
+    }
+
+    #modules {
+        padding: 15px 15px 15px 15px;
+    }
+
+	#usage td {
+	  padding:4px;
+	}
+
+	#usage table {
+		border-spacing: 2px;
+		border-collapse: separate;
+	}
+	</style>
+	
+</head>
+    <body>
+        
+        <div>
+			<script src="Scripts/require.js" data-main="app/scripts/bootstrap.js?v="+DateTime.Now.ToString("HHmmssff")></script>
+			
+			<!-- Modal -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+				
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title" id="myModalLabel">MML Help</h4>
+						</div>
+						<div class="modal-body">
+							<p>MML is the Music Macro Language which is a powerful expression based language that allows you to describe a musical piece.</p>
+							<p>
+								<table class="table table-condensed">
+									<thead>
+										<tr>
+											<th>Character</th>
+											<th>Description</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Tnn</td>
+											<td>Tempo setting</td>
+										</tr>
+										<tr>
+											<td>A,B,C,D,E,F,G</td>
+											<td>Note name followed by the note duration</td>
+										</tr>
+										<tr>
+											<td>+,#,-</td>
+											<td>Sharp / Flat</td>
+										</tr>
+										<tr>
+											<td>R</td>
+											<td>Rest</td>
+										</tr>
+										<tr>
+											<td>Lnn</td>
+											<td>Default note duration</td>
+										</tr>
+										<tr>
+											<td>.</td>
+											<td>Dotted note</td>
+										</tr>
+										<tr>
+											<td>Onn</td>
+											<td>Octave</td>
+										</tr>
+										<tr>
+											<td>&lt;,&gt;</td>
+											<td>Octave shift</td>
+										</tr>
+										<tr>
+											<td>&</td>
+											<td>Tie</td>
+										</tr>
+									</tbody>
+								</table>                    
+							</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			<div class="container">
+
+				<!-- Fixed navbar -->
+				<nav class="navbar navbar-default navbar-fixed-top">
+					<div class="container-fluid">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<a class="navbar-brand" href="#">WebMoog - HTML5 Synthesizer</a>
+						</div>
+						<div class="collapse navbar-collapse">
+							<ul class="nav navbar-nav">
+								<li><a href="#">Home</a></li>
+								<li><a href="#moog">Synthesizer</a></li>
+								<li><a href="#accordion">Controls</a></li>
+								<li><a href="#mooghelp">Info</a></li>
+								<li><a href="#usage">Usage</a></li>
+							</ul>
+						</div><!--/.nav-collapse -->
+					</div>
+				</nav>
+				
+				<div class="row">
+					<div class="col-lg-12">
+				
+						<div class="jumbotron text-center">
+							<h1>WebMoog - HTML5 Synthesizer</h1>
+							<p class="lead">The WebMoog is a Web Audio API based synthesizer created to emulate the Moog Modular system.</p>
+							<p>The WebMoog allows you to create an almost infinite number of sounds using the supplied modules.  Many effects and sounds can be generated using these modules.</p>
+							<p>The WebMoog also supports the Music Macro Language for creating powerful presentations using simple textual representations.</p>
+							<div class="btn-bar"><a class="btn btn-lg btn-info" href="http://webaudio.github.io/web-audio-api/" target="ext">Web Audio API</a><a  class="btn btn-lg btn-success" href="#moog">Go To Synthesizer</a><a href="#mooghelp" class="btn btn-lg btn-info">More Info</a></div>
+						</div>
+				
+						<hr />    
+
+						<section id="moog" style="width:700px;margin:0 auto;">
+							<canvas id="viewport" width="700" height="700"><input type="button" /></canvas>
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h4 class="panel-title">Patch</h4>
+								</div>
+								<div class="panel-body">
+									<p>Current Patch</p>
+									<p><button style="margin-right:4px;" class="btn btn-sm btn-success">Save <span class="glyphicon glyphicon-save"></span></button><button class="btn btn-sm btn-primary">Load <span class="glyphicon glyphicon-load"></span></button></p>
+									<p>Default Samples</p>
+									<p>
+										<select id="patch">
+											<option value="">Clear All Patch</option>
+											<option selected="" value="vco1.m1:kb.cv,vco1.o:vcf1.i1,vca1.o:mix.i1,vcf1.o:vca1.i1,kb.g:vca1.m1">1VCO+1VCA Most Simple Patch</option>
+											<option value="vco1.o:vcf1.i1,vco2.o:vcf1.i2,kb.cv:vco1.m1,kb.cv:vco2.m1,kb.cv:vcf1.m1,vcf1.o:vca1.i1,vca1.o:mix.i1,kb.g:env1.tr,env1.op:vca1.m1">2VCO=&gt;1VCF=&gt;1VCA Basic Patch</option>
+											<option value="vco1.o:vcf1.i1,vco2.o:vcf2.i1,kb.cv:vco1.m1,kb.cv:vco2.m1,kb.cv:vcf1.m1,kb.cv:vcf2.m1,vcf1.o:vca1.i1,vcf2.o:vca2.i1,kb.g:env1.tr,kb.g:env2.tr,env1.op:vca1.m1,env2.op:vca2.m1,vca1.o:mix.i1,vca2.o:mix.i2">2VCO=&gt;2VCF=&gt;2VCA Dual Channel Patch</option>
+											<option value="vco1.o:vcf1.i1,vco2.o:vcf1.i2,vcf1.o:vca1.i1,vca1.o:mix.i1,kb.cv:vco1.m1,kb.cv:vco2.m1,kb.cv:vcf1.m1,kb.g:env1.tr,env1.op:vca1.m1,lfo1.o:vcf1.m2,lfo1.o10:vco1.m2">LFO Modulation Patch</option>
+											<option value="vco1.o:vcf1.i1,vco2.o:vcf1.i2,noise.o:vcf1.i3,vcf1.o:vca1.i1,vca1.o:mix.i1,env1.op:vca1.m1,noise.o:sh.i,lfo2.o:sh.tr,sh.o:vco1.m2,lfo1.o:vcf1.m2,kb.cv:vco1.m1,kb.cv:vco2.m1,kb.cv:vcf1.m1,kb.g:env1.tr">Sound Effect Patch</option>
+											<option value="vco1.o:ring.i1,vco2.o:ring.i2,ring.o:vcf1.i1,vcf1.o:vca1.i1,vca1.o:mix.i1,vca2.i1:noise.o,vca2.o:vcf1.i2,kb.cv:vco1.m1,kb.cv:vco2.m1,kb.cv:vcf1.m1,kb.g:env1.tr,kb.g:env2.tr,env1.op:vca1.m1,env2.op:vca2.m1">Ring Patch</option>
+										</select>                   
+									</p>
+								</div>
+							</div>                
+						</section>
+					
+						<hr />    
+
+						<section id="accordion" class="panel-group">
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h3 class="panel-title">Controls</h3>
+								</div>
+								<div class="panel-body">
+									<p>MML:  <a data-toggle="modal" data-target="#myModal" style="cursor:pointer;"><span class="badge" style="background-color:green;">?</span></a></p>
+									
+									<p>
+										<textarea style="width:500px" id="mml" rows="8" cols="80" >t150
+			e-d-&lt;g-4&gt;&lt;g-4&gt;g-rg-4e-d-&lt;g-4&gt;g-rg-4e-d-&ltg-4&gt;g-4&lt;e-4&gt;frf4
+			e-d0&lt;d-4&gt;frf4e-d-&lt;d-4&gt;frf4e-d-&lt;d-4&gt;f4&lt;e-4&gt;f4&lt;g-4&gt;g-rg-4
+										</textarea>
+									</p>
+									<p><button id="play" style="margin-right:5px;" class="btn btn-sm btn-success">Play <span class="glyphicon glyphicon-play"></span></button><button id="stop" class="btn btn-sm btn-danger">Stop <span class="glyphicon glyphicon-stop"></span></button></p>
+									<hr />
+									<p>URL: <button id="save" class="btn btn-sm btn-primary">Create</button></p>
+									<p><textarea id="url" rows="8" cols="80"></textarea></p>
+									<p>Share</p>
+									<p><span class="fa fa-twitter-square fa-3x" style="color:#4099FF;cursor:pointer;"></span><span style="color:#3B5998;margin-left:4px;cursor:pointer;" class="fa fa-facebook-square fa-3x"></span></p>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h4 class="panel-title">Usage
+										@*                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Usage</a><a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapseFour"><span class="glyphicon glyphicon-chevron-down"></span></a>*@
+									</h4>
+								</div>
+								<div class="panel-body" id="usage">
+									<p>The HtmlSynth consists of several modules including 2VCOs, 2VCFs, 2VCAs, 2ENVs and 2LFOs.</p>
+									<p>Click on a jack and drag your mouse to connect to another jack.</p>
+									<p>The triangle on the jack indicates the direction of the jack.  If the triangle points away from the jack that means it's an output jack and if the triangle points toward the jack that means it's an input jack.</p>
+									<p> Only input jacks can be connected to output jacks and vice versa.  There is only one input per jack, but an output jack can have many outputs - called a fan out.</p>
+									<p>To remove a connection click on the input jack and drag anywhere but another jack and release your mouse button.</p>
+									<p><a href="#modules" class="btn btn-lg btn-info">Modules/Tutorial</a></p>
+									<p><span style="font-weight: bold">Key Mapping</span></p>
+									<table border="1">
+										<tbody>
+											<tr>
+												<td style="color:#a0a0a0">1</td><td colspan="2" style="background:#808080"><b>2</b><br>C#3</td>
+												<td colspan="2" style="background:#808080"><b>3</b><br>D#3</td>
+												<td colspan="2" style="color:#a0a0a0">4</td>
+												<td colspan="2" style="background:#808080"><b>5</b><br>F#3</td>
+												<td colspan="2" style="background:#808080"><b>6</b><br>G#3</td>
+												<td colspan="2" style="background:#808080"><b>7</b><br>A#3</td>
+												<td colspan="2" style="color:#a0a0a0">8</td>
+												<td colspan="2" style="background:#808080"><b>9</b><br>C#4</td>
+												<td colspan="2" style="background:#808080"><b>0</b><br>D#4</td>
+											</tr>
+											<tr>
+												<td colspan="2"><b>Q</b><br> C3</td>
+												<td colspan="2"><b>W</b><br> D3</td>
+												<td colspan="2"><b>E</b><br>E3</td>
+												<td colspan="2"><b>R</b><br>F3</td>
+												<td colspan="2"><b>T</b><br>G3</td>
+												<td colspan="2"><b>Y</b><br>A3</td>
+												<td colspan="2"><b>U</b><br>B3</td>
+												<td colspan="2"><b>I</b><br>C4</td>
+												<td colspan="2"><b>O</b><br>D4</td>
+												<td colspan="2"><b>P</b><br>E4</td>
+											</tr>
+											<tr>
+												<td></td>
+												<td colspan="2" style="color:#a0a0a0">A</td>
+												<td colspan="2" style="background:#808080"><b>S</b><br>C#2</td>
+												<td colspan="2" style="background:#808080"><b>D</b><br>D#2</td>
+												<td colspan="2" style="color:#a0a0a0">F</td>
+												<td colspan="2" style="background:#808080"><b>G</b><br>F#2</td>
+												<td colspan="2" style="background:#808080"><b>H</b><br>G#2</td>
+												<td colspan="2" style="background:#808080"><b>J</b><br>A#2</td>
+												<td colspan="2" style="color:#a0a0a0">K</td>
+												<td colspan="2" style="background:#808080"><b>L</b><br>C#3</td>
+												<td colspan="2" style="background:#808080"><b>;</b><br>D#3</td>
+											</tr>
+											<tr>
+												<td colspan="2"></td>
+												<td colspan="2"><b>Z</b><br>C2</td>
+												<td colspan="2"><b>X</b><br>D2</td>
+												<td colspan="2"><b>C</b><br>E2</td>
+												<td colspan="2"><b>V</b><br>F2</td>
+												<td colspan="2"><b>B</b><br>G2</td>
+												<td colspan="2"><b>N</b><br>A2</td>
+												<td colspan="2"><b>M</b><br>B2</td>
+												<td colspan="2"><b>,</b><br>C3</td>
+												<td colspan="2"><b>.</b><br>D3</td>
+												<td colspan="2">/</td>
+											</tr>
+										</tbody>
+
+									</table>                            
+									
+								</div>                
+							</div>
+						</section>
+				
+						<section id="mooghelp">
+					
+					
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h3 class="panel-title">Moog Modular System</h3>
+								</div>
+								<div class="panel-body">
+							
+									<div class="callout callout-info">
+										<p>The Moog modular system consists of a number of various modules mounted in a cabinet. Each module performs a specific signal-generating or -modifying function. These modules offered unprecedented control over creating sounds by allowing a user to modify primary sound waveforms (sine waves, square waves and other waveforms provided by voltage controlled oscillators or VCO) with amplitude modulators (voltage controlled amplifiers or VCA) and spectral modulators (voltage controlled filters (VCF) or fixed filter banks) and other modifiers. Envelope generators provided further control by modulating the attack, decay, sustain and release (ADSR) parameters of the VCAs, VCFs and other modules. The modules are patched together with patch cords with ¼i-inch mono plugs. The patch cords and module parameter knobs could be adjusted in countless ways to create a nearly infinite number of sounds. The final sound was heard ('triggered') from the system by pressing a key on an attached keyboard or pressing on the ribbon controller.</p>
+									</div>
+							
+									<div id="modules">
+
+										<ul class="nav nav-pills" role="tablist">
+											<li class="active"><a href="#vco" role="tab" data-toggle="tab">VCO</a></li>
+											<li><a href="#vcf" role="tab" data-toggle="tab">VCF</a></li>
+											<li><a href="#vca" role="tab" data-toggle="tab">VCA</a></li>
+											<li><a href="#env" role="tab" data-toggle="tab">ENV</a></li>
+											<li><a href="#lfo" role="tab" data-toggle="tab">LFO</a></li>
+											<li><a href="#sh" role="tab" data-toggle="tab">RING/NOISE/SH</a></li>
+											<li><a href="#keyboard" role="tab" data-toggle="tab">KEYBOARD</a></li>
+											<li><a href="#mix" role="tab" data-toggle="tab">OUTPUT MIX</a></li>
+										</ul>
+
+							
+										<!-- Tab panes -->
+										<div class="tab-content" style="min-height:400px;">
+											<div class="tab-pane active" id="vco">
+												<img src="Content/Images/vco.png" style="float:left;margin:10px" />
+												<div class="module-description">
+													<p>The VCO is a voltage control oscillator for sound generation.  This is your primary sound generation source.  The 'Out' jack continuously outputs the wave signal specified with the waveform and pitch controls.</p>
+													<p>Three 'Mod' jacks and sliders are used to modulate the oscillator pitch. Usually, one 'Mod' jack is connected to the keyboard 'CV' and the slider is set to max for setting the center frequency to the corresponding note.</p>
+													<p>The switch labeled Oct controls the octave of the relative pitch cooresponding to each key on the keyboard.  The switch labled Form allows you to choose from either a sin, triangle or square wave.  The pitch knob allows you to adjust the octave pitch.  The outermost knob moves in semi-tone increments and the innermost knob controls up to a semi-tone</p>
+													<p>The PWM jack and the cooresponding sliders allow you to control the duty cycle of the generated waveform.  The Man slider allows you to manually control the duty cycle and the jack labeled PWM and cooresponding slider allow you to use an external signal, e.g. the LFO.  The duty cycle can be set for any waveform.</p>
+												</div>
+												<div class="clearfix"></div>
+									
+											</div>
+											<div class="tab-pane" id="vcf">
+												<img src="Content/Images/vcf.png" style="float:left;margin:10px" />
+												<div class="module-description">
+													<p>The VCF is a low pass voltage controlled filter module used to filter and contour your signal.  It is typically cascaded from the VCO for making a desired sound color.</p>
+													<p>This module has three input jacks with cooresponding mix sliders labeled Sig 1-3.  The two knobs labeled Freq and Reso control the cutoff frequency and resonance parameter for the filter respectively.</p>
+													<p>This module has three modulation input jacks with corresponding mix xliders labeled Mod 1-3.  These are used to control the cutoff frequency of the filter.  These jacks are typically connected to the CV jack on the keyboard in order to match the tone frquency of the pressed key which will introduce harmonics resonant with the pitch of the key being pressed.</p>
+												</div>
+												<div class="clearfix"></div>
+											</div>
+											<div class="tab-pane" id="vca">
+												<img src="Content/Images/vca.png" style="float:left;margin:10px" />
+												<div class="module-description">
+													<p>The VCA is a voltage controlled amplifier with the gain being controlled by the Mod inputs.  The three inputs labled Sig 1-3 and cooresponding sliders are the sound source inputs and the jacks labeled Mod 1-3 are the gain controls. <span style="font-weight: bold">Note that the Mod inputs are additive</span> This could cause problems with sound leakage if using the LFO and ENV together on the same VCA.  In order to achieve the desired tremlo effect with the LFO it's necessary to cascade the VCAs.</p>
+												</div>
+											</div>
+											<div class="tab-pane" id="lfo">
+												<img src="Content/Images/lfo.png" style="float:left;margin:10px" />
+												<div class="module-description">
+													<p>The LFO is a low frequency osscillator that can be used for a variety of modulation purposes with the most typical being vibrato and tremolo.</p>
+													<p>The waveform selection switch allows three waveforms to be selected, sin, triangle, and square.  The Freq knob allows you to adjust the frequency anywhere between 0.1Hz to 100Hz.</p>
+													<p>The typical usages include modulating a VCO to create a vibrato effect.  To create at tremolo effect you will modulate a VCA, but take care to cascade if you need a VCA for other reasons.  See the description of VCA for more information.</p>
+													<p>The two output jacks include a 1/1 and a 1/10 signal.  These values represent the amplitude of the signal since some modules are more senstive to modulation than others, for example the VCO module.  In order to get an effective vibrato you should use the 1/10 ouput jack for modulating VCOs since they are very senstive to modulation variancy.</p>
+												</div>
+												<div class="clearfix"></div>
+											</div>
+											<div class="tab-pane" id="keyboard">
+												<img src="Content/Images/kb.png" style="margin:10px;"/>
+												<div class="module-description">
+													<p>The keyboard models a simple piano keyboard and has two outputs.  The 'CV', or Control Voltage, jack represents the relative pitch of the currently pressed key.  This output is typically used to modulate the resonant frequency of the VCO 'MOD' jack so the VCO follows the pitch of the selected key.  The other jack labeled 'Gate' is a trigger signal representing the current status of any keypresses on the keyboard.  It is typically used to trigger the 'ENV' module to generate a ADSR envelope.</p>
+													<p>The glide control knob controls the rate of change between pitch changes on the keyboard.</p>
+												
+												</div>
+											</div>
+											<div class="tab-pane" id="sh">
+												<div style="float:left">
+													<div>
+														<img src="Content/Images/ring.png" style="margin:10px" />                                    
+													</div>
+													<div>
+														<img src="Content/Images/shsample.png" style="margin:10px" />
+													</div>
+												</div>
+												<div class="module-description">
+													<p>
+														There are several special functions available for contouring your signal.
+													</p>
+													<p><span style="font-weight: bold;">RING</span></p>
+													<p>The Ring Modulator is a module that will multiply the two input signals together and present the product at the output jack.  A typical use of the ring modulator is to muliply two detuned VCO signals.  This will generate complex harmonics and metallic bell-like sounds.</p>
+													<p><span style="font-weight: bold;">NOISE</span></p>
+													<p>The ouput jack of the noise generator continously outputs the selected noise type.  The slider switch allows a choice of either pink, brown, or white noise.</p>
+													<p><span style="font-weight: bold;">S&H</span></p>
+													<p>The sample and hold moudle will sample the value of the 'In' signal when triggered and hold that signal until the next trigger.  A typical use the NOISE generator will be connected to the 'In' jack and the LFO output will be conected to the 'Trig' jack.  This will generate a random value that will be changed by the LFO period.  This value can be used for modulating a random note sequence.</p>
+
+												</div>
+												<div class="clearfix"></div>
+											</div>
+											<div class="tab-pane" id="mix">
+												<img src='Content/Images/out.png' style="float:left;margin:10px" />
+												<div class="module-description">
+													<p>The mixer is the final output module and is connected to your main sound generation device.  All signals connected here are summed and presented to the underlying sound generation engine for final sound synthesis.
+													</p>
+												</div>
+												<div class="clearfix"></div>
+											</div>
+											<div class="tab-pane" id="env">
+												<img src="Content/Images/env.png" style="float:left;margin:10px" />
+												<div class="module-description">
+													<p>The ENV is an envelope generator for generating ADSR envelopes (Attack,Decay,Sustain,Release).  Typically the keyboard 'GATE' output is connected to the 'TRIG' input jack.</p>
+													<p>Normal and inverted envelopes are supported</p>
+													<p><img src="Content/Images/adsr.png"/></p>
+												</div>
+												<div class="clearfix"></div>
+											</div>
+
+										</div>
+									</div>
+
+								</div>            
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+
+
+			<img id="panel" src="Content/Images/panel.png" style="height:0px;width:0px;"/>
+			<img id="keypress" src="Content/Images/keypress.png" style="height:0px;width:0px;"/>
+			<img id="sw5" src="Content/Images/sw5.png" style="height:0px;width:0px;"/>
+			<img id="sw3" src="Content/Images/sw3.png" style="height:0px;width:0px;"/>
+			<img id="sw2" src="Content/Images/sw2.png" style="height:0px;width:0px;"/>
+			<img id="knob" src="Content/Images/knob.png" style="height:0px;width:0px;"/>
+			<img id="knob2" src="Content/Images/knob2.png" style="height:0px;width:0px;"/>
+			<img id="knob3" src="Content/Images/knob3.png" style="height:0px;width:0px;"/>
+			<img id="sliderpos" src="Content/Images/sliderpos.png" style="height:0px;width:0px;"/>
+			<img id="sw3horz" src="Content/Images/sw3horz.png" style="height:0px;width:0px;"/>
+			<img id="background" src="Content/Images/brushedmetal.png" style="height:0px;width:0px;"/>
+			
+        </div>
+
+
+    </body>
+</html>
+
+

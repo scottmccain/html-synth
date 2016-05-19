@@ -1,0 +1,43 @@
+#viewport:active, #viewport:focus {
+    cursor: url(../../Content/Cursors/Grabbed15x19.cur), auto;
+}
+
+.control-hover {
+    cursor: url(../../Content/Cursors/grab.cur), auto;
+}
+
+/* .container { max-width: 800px; width: 800px;} */
+
+.callout {
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+
+.callout-info {
+    border-left-color: #5bc0de;    
+}
+
+.callout-danger {
+    border-left-color: #d9534f;
+}
+
+.callout-warning {
+    border-left-color: #f0ad4e;
+}
+
+.subheader {
+    color: #448;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: medium;
+    text-align: left;
+    font-weight: bold;
+    margin: 5px 0px;
+    padding: 2px 4px;
+    border-radius: 2px;
+    background: #c0c8ff;
+    background: linear-gradient(to bottom, #c0c8ff, #b0b8f8);
+    background: -moz-linear-gradient(top, #c0c8ff, #b0b8f8);
+}
